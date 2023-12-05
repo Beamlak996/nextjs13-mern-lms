@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LMS Activation Email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        min-width: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        background-color: #fafafa;
+        color: #222222;
+      }
+      a {
+        color: #000;
+        text-decoration: none;
+      }
+      h1 {
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+        margin-top: 0;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+      p {
+        margin-top: 0;
+        margin-bottom: 24px;
+      }
+      table td {
+        vertical-align: top;
+      }
+      .email-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .email-header {
+        background-color: #0070f3;
+        padding: 24px;
+        color: white;
+      }
+      .email-body {
+        padding: 24px;
+        background-color: white;
+      }
+      .email-footer {
+        padding: 24px;
+        background-color: #f6f6f6;
+      }
+      .button {
+        display: inline-block;
+        background-color: #0070f3;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-wrapper" >
+        <div class="email-header" >
+            Welcome to ELearning
+        </div>
+        <div class="email-body">
+            <p>Hello <%= user.name %>,</p>
+            <p>Thank you for registering with ELearning. To activate your account use the following activation code:</p>
+            <h2><%= activationCode %></h2>
+            <p>Please use this code within 5 minutes</p>
+            <p>If you don't it will expire</p>
+        </div>
+        <div class="email-footer" >
+            <p>If you have any questions, please contact us on <a href="">support@beamlak.com</a></p>
+        </div>
+    </div>
+  </body>
+</html>
