@@ -1,6 +1,7 @@
 import nodemailer, { Transporter } from "nodemailer"
 import ejs from "ejs"
 import path from "path"
+import { CatchAsyncError } from "../middleware/catchAsyncError"
 require('dotenv').config()
 
 interface EmailOptions {
@@ -38,3 +39,5 @@ export const sendMail = async (options: EmailOptions): Promise<void> => {
 
     await transport.sendMail(mailOptions)
 }
+
+
