@@ -5,6 +5,7 @@ import {
   logoutUser,
   registrationUesr,
 } from "../controllers/user.controller";
+import { authorizeRoles, isAuthenticated } from "../middleware/auth";
 
 const userRouter = express.Router();
 
