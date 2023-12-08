@@ -235,6 +235,8 @@ export const updateAccessToken = CatchAsyncError(
         }
       );
 
+      req.user = user
+
       res.cookie("access_token", accessToken, accessTokenOptions);
       res.cookie("refresh_token", refreshToken, refreshTokenOptions);
 
@@ -248,37 +250,78 @@ export const updateAccessToken = CatchAsyncError(
   }
 );
 
-
 // get user info
-export const getUserInfo = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userId = req.user?._id
-    getUserById(userId, res)
-  } catch (error: any) {
-    return next(new ErrorHandler(error.message, 400))
+export const getUserInfo = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = req.user?._id;
+      getUserById(userId, res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
   }
-})
+);
 
 // social auth
 interface ISocialAuthBody {
-  email: string
-  name: string
-  avatar: string
+  email: string;
+  name: string;
+  avatar: string;
 }
 
-export const socialAuth = CatchAsyncError(async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { email, name, avatar } = req.body as ISocialAuthBody
-    const user = await userModel.findOne({email})
-    
-    if(!user) {
-      const newUser = await userModel.create({email, name, avatar})
-      sendToken(newUser, 200, res)
-    } else {
-      sendToken(user, 200, res)
+export const socialAuth = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, name, avatar } = req.body as ISocialAuthBody;
+      const user = await userModel.findOne({ email });
+
+      if (!user) {
+        const newUser = await userModel.create({ email, name, avatar });
+        sendToken(newUser, 200, res);
+      } else {
+        sendToken(user, 200, res);
+      }
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
-    
-  } catch (error: any) {
-    return next(new ErrorHandler(error.message, 400))
   }
-})
+);
+
+// udpate user info
+interface IUpdateUserInfo {
+  name?: string;
+  email?: string;
+}
+
+export const updateUserInfo = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { name, email } = req.body as IUpdateUserInfo;
+      const userId = req.user?._id;
+
+      const user = await userModel.findById(userId);
+
+      if (email && user) {
+        const isEmailExist = await userModel.findOne({ email });
+        if (isEmailExist) {
+          return next(new ErrorHandler("Email already exists", 400));
+        }
+        user.email = email;
+      }
+
+      if (name && user) {
+        user.name = name;
+      }
+
+      await user?.save();
+      await redis.set(userId, JSON.stringify(user));
+
+      res.status(201).json({
+        success: true,
+        user,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
