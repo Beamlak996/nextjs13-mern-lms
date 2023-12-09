@@ -22,7 +22,6 @@ interface ICourseData extends Document {
     title: string
     description: string
     videoUrl: string
-    videoThumbnail: object
     videoSection: string
     videoLength: number
     videoPlayer: string
@@ -76,7 +75,6 @@ const commentSchema = new Schema<IComment>({
 const courseDataSchema = new Schema<ICourseData>({
     title: String,
     videoUrl: String,
-    videoThumbnail: Object,
     videoSection: String,
     description: String,
     videoLength: Number,
@@ -106,11 +104,9 @@ const courseSchema = new Schema<ICourse>({
     thumbnail: {
         public_url: {
             type: String,
-            require: true
         },
         url: {
             type: String,
-            require: true
         }
     },
     tags: {
@@ -140,4 +136,6 @@ const courseSchema = new Schema<ICourse>({
 })
 
 
-export const CourseModel = Model<ICourse> = mongoose.model("Course", courseSchema)
+const CourseModel: Model<ICourse> = mongoose.model("Course", courseSchema)
+
+export default CourseModel
