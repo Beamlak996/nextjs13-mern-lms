@@ -12,7 +12,7 @@ import {
   sendToken,
 } from "../utils/jwt";
 import { redis } from "../utils/redis";
-import { getAllUsersService, getUserById } from "../services/user.service";
+import { getAllUsersService, getUserById, updateUserRoleService } from "../services/user.service";
 import cloudinary from "cloudinary"
 
 require("dotenv").config();
@@ -435,6 +435,19 @@ export const getAllUsers = CatchAsyncError(
       getAllUsersService(res)
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400))
+    }
+  }
+)
+
+// update user role --only admin
+export const updateUserRole = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id, role } = req.body
+
+      updateUserRoleService(res, id, role)
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 )
