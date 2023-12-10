@@ -61,14 +61,13 @@ export const createOrder = CatchAsyncError(
 
       try {
         if (user) {
-        // Some thing wrong with email sending must be fixed
-            
-        //   await sendMail({
-        //     email: user.email,
-        //     subject: "Order confirmation",
-        //     template: "order-confirmation.ejs",
-        //     data: mailData,
-        //   });
+          // Some thing wrong with email sending must be fixed
+          //   await sendMail({
+          //     email: user.email,
+          //     subject: "Order confirmation",
+          //     template: "order-confirmation.ejs",
+          //     data: mailData,
+          //   });
         }
       } catch (error: any) {
         return next(new ErrorHandler(error.message, 400));
